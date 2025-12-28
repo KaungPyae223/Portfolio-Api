@@ -18,7 +18,7 @@ async function main() {
     data: [
       {
         prefix: "I'm",
-        name: "Kaung Pyae",
+        name: "Kaung Pyae Aung",
         title: "Full Stack Developer",
         content:
           "Full-stack developer skilled in Laravel, Next.js, React, and cloud deployment, delivering scalable platforms like job portals, legal search engines, and custom packages. Proven experience at MMSIT, Netra, and ET Verdict, collaborating in Agile teams to build maintainable code with Git workflows. Eager for mid-level roles to drive impactful web solutions.",
@@ -33,7 +33,7 @@ async function main() {
       },
       {
         prefix: "私は",
-        name: "Kaung Pyae",
+        name: "カウ・ピェ・アウン",
         title: "フルスタック開発者",
         content:
           "Laravel、Next.js、React、クラウドデプロイに精通したフルスタック開発者です。求人ポータル、法律検索エンジン、カスタムパッケージなどのスケーラブルなプラットフォームを構築してきました。MMSIT、Netra、ET Verdictでの実績があり、アジャイルチームでGitワークフローを活用した保守可能なコードを開発。ミッドレベルポジションでインパクトのあるウェブソリューションを推進したいと考えています。",
