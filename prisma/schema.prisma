@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Image {
+  id   Int    @id @default(autoincrement())
+  url  String
+  public_id String
+  category String
+  imageable_id Int
+  imageable_type String
+  @@map("images")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String  @unique
+  password      String
+  random_token  String?
+  @@map("users")
+}
+
+model Home {
+  id            Int       @id @default(autoincrement())
+  prefix        String?
+  name          String?
+  title         String?
+  content       String?
+  date_of_birth String?
+  location      String?
+  email         String?
+  phone         String?
+  github        String?
+  linkedin      String? 
+  facebook      String?
+  language      String?
+  @@map("home")
+}
+
+model Link {
+ id            Int       @id @default(autoincrement())
+ name          String
+ url           String
+ project_id    Int
+ project       Project @relation(fields: [project_id], references: [id])
+ @@map("links")
+}
+
+
+model Skill {
+ id            Int       @id @default(autoincrement())
+ name          String
+ created_at    DateTime @default(now())
+ updated_at    DateTime @updatedAt
+ @@map("skills")
+}
+
+model Project {
+ id            Int       @id @default(autoincrement())
+ name          String
+ description   String
+ technologies  String
+ type          String
+ duration      String
+ team_size     String
+ role          String
+ challenge     String
+ solutions     String
+ set_home      Boolean
+ links         Link[]
+ language      String?
+ created_at    DateTime @default(now())
+ updated_at    DateTime @updatedAt
+ @@map("projects")
+}
+
+model Certificate {
+ id            Int       @id @default(autoincrement())
+ title         String
+ lecture       String
+ url           String
+ complete_date String
+ technologies  String
+ set_home      Boolean
+ created_at    DateTime @default(now())
+ updated_at    DateTime @updatedAt
+ @@map("certificates")
+}
+
+model About {
+ id            Int       @id @default(autoincrement())
+ first_paragraph   String
+ second_paragraph  String
+ language      String?
+ @@map("about")
+}
+
+model Experience {
+  id            Int       @id @default(autoincrement())
+  title         String?
+  description   String?
+  experienceable_type String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  language      String?
+  @@map("experiences")
+}
+
+model Education {
+  id            Int       @id @default(autoincrement())
+  title         String?
+  description   String?
+  educationable_type String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  language      String?
+  @@map("educations")
+}
+
+model Log {
+  id            Int       @id @default(autoincrement())
+  title         String?
+  description   String?
+  logable_id Int
+  logable_type String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  @@map("logs")
+}
+
+
+
+
