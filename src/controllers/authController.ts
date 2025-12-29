@@ -113,13 +113,13 @@ export const loginController = [
       .cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        sameSite: "lax",
         maxAge: 15 * 60 * 1000,
       })
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        sameSite: "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .status(201)
@@ -195,5 +195,14 @@ export const logOutController = async (
     message: "Log out successfully",
   });
 };
+
+export const checkAuthController = async (
+  req: MiddlewareRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  
+  res.json("me");
+}
 
 

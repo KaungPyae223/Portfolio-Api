@@ -7,13 +7,6 @@ async function main() {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(process.env.PASSWORD!, salt);
 
-  await prisma.user.create({
-    data: {
-      email: process.env.EMAIL!,
-      password: hash,
-    },
-  });
-
   await prisma.home.createMany({
     data: [
       {

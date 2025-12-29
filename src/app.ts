@@ -7,6 +7,7 @@ import rateLimitter from "./middlewares/rateLimitter";
 import authRoutes from "./routes/api/v1/auth";
 import cookieParser from "cookie-parser";
 import userSideRoutes from "./routes/api/v1/user-side";
+import home from "./routes/api/v1/home-management";
 
 export const app = express();
 
@@ -40,6 +41,7 @@ app
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user-side", userSideRoutes);
+app.use("/api/v1/home-management",home)
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const status = error.status || 500;
