@@ -32,6 +32,23 @@ export const getHomeExperiencesService = async () => {
   return getUserSideService;
 };
 
+export const createHomeExperienceService = async (experienceData: any) => {
+  await prisma.experience.create({
+    data: {
+      ...experienceData,
+      experienceable_type: "Home",
+    },
+  });
+};
+
+export const deleteExperience = async (id: number) => {
+  await prisma.experience.delete({
+    where: {
+      id: id,
+    },
+  });
+};
+
 export const getHomeEducationService = async () => {
   const getUserSideService = await prisma.education.findMany({
     where: {
@@ -39,4 +56,21 @@ export const getHomeEducationService = async () => {
     },
   });
   return getUserSideService;
+};
+
+export const createHomeEducationService = async (educationData: any) => {
+  await prisma.education.create({
+    data: {
+      ...educationData,
+      educationable_type: "Home",
+    },
+  });
+};
+
+export const deleteEducation = async (id: number) => {
+  await prisma.education.delete({
+    where: {
+      id: id,
+    },
+  });
 };

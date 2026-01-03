@@ -5,19 +5,17 @@ import { MiddlewareRequest } from "../types/middlewareRequest";
 import { errorCode } from "../config/errorCode";
 import { getUserByEmail, updateUser } from "../services/authService";
 import { generateJWTTokens } from "../utils/auth";
+import { createError } from "../utils/error";
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: MiddlewareRequest,
   _res: Response,
   next: NextFunction
-): void => {
+): Promise<void> => {
   const { accessToken, refreshToken } = req.cookies ?? {};
 
   if (!refreshToken) {
-    const error: CustomErrorType = new Error("Unauthorized");
-    error.status = 401;
-    error.err_code = errorCode.unauthorized;
-    return next(error);
+    return next(createError("Unauthorized", 401, errorCode.unauthorized));
   }
 
   const generateNewTokens = async () => {
@@ -25,10 +23,9 @@ export const authMiddleware = (
     let decoded;
 
     if (!secret) {
-      const error: CustomErrorType = new Error("Server configuration error");
-      error.status = 500;
-      error.err_code = errorCode.serverError;
-      return next(error);
+      return next(
+        createError("Server configuration error", 500, errorCode.serverError)
+      );
     }
 
     try {
@@ -37,21 +34,23 @@ export const authMiddleware = (
       const user = await getUserByEmail(email);
 
       if (!user) {
-        const error: CustomErrorType = new Error(
-          "You are not unauthenticated user"
+        return next(
+          createError(
+            "You are not an authenticated user",
+            401,
+            errorCode.expiredAccessToken
+          )
         );
-        error.status = 401;
-        error.err_code = errorCode.expiredAccessToken;
-        return next(error);
       }
 
-      if (user.random_token != refreshToken) {
-        const error: CustomErrorType = new Error(
-          "You are not unauthenticated user"
+      if (user.random_token !== refreshToken) {
+        return next(
+          createError(
+            "You are not an authenticated user",
+            401,
+            errorCode.expiredAccessToken
+          )
         );
-        error.status = 401;
-        error.err_code = errorCode.expiredAccessToken;
-        return next(error);
       }
 
       const tokens = generateJWTTokens(user);
@@ -77,22 +76,24 @@ export const authMiddleware = (
       req.userID = user.id;
       next();
     } catch (err) {
-      const error: CustomErrorType = new Error("Refresh Token is Expired");
-      error.status = 401;
-      error.err_code = errorCode.expiredAccessToken;
-      return next(error);
+      return next(
+        createError(
+          "Refresh Token is Expired",
+          401,
+          errorCode.expiredAccessToken
+        )
+      );
     }
   };
 
   if (!accessToken) {
-    generateNewTokens();
+    await generateNewTokens();
   } else {
     const secret = process.env.ACCESS_TOKEN_SECRET;
     if (!secret) {
-      const error: CustomErrorType = new Error("Server configuration error");
-      error.status = 500;
-      error.err_code = errorCode.serverError;
-      return next(error);
+      return next(
+        createError("Server configuration error", 500, errorCode.serverError)
+      );
     }
 
     try {
@@ -103,12 +104,15 @@ export const authMiddleware = (
       next();
     } catch (err: any) {
       if (err.name == "TokenExpiredError") {
-        generateNewTokens();
+        await generateNewTokens();
       } else {
-        const error: CustomErrorType = new Error("Access Token is invalid");
-        error.status = 401;
-        error.err_code = errorCode.expiredAccessToken;
-        return next(error);
+        return next(
+          createError(
+            "Access Token is invalid",
+            401,
+            errorCode.expiredAccessToken
+          )
+        );
       }
     }
   }

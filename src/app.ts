@@ -4,10 +4,8 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimitter from "./middlewares/rateLimitter";
-import authRoutes from "./routes/api/v1/auth";
 import cookieParser from "cookie-parser";
-import userSideRoutes from "./routes/api/v1/user-side";
-import home from "./routes/api/v1/home-management";
+import router from "./routes/api/v1";
 
 export const app = express();
 
@@ -37,11 +35,12 @@ app
   .use(compression())
   .use(helmet({}))
   .use(cookieParser())
-  .use(rateLimitter);
+  .use(rateLimitter)
+  .use("/api/v1", router);
 
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/user-side", userSideRoutes);
-app.use("/api/v1/home-management",home)
+// app.use("/api/v1/auth", authRoutes);
+// app.use("/api/v1/user-side", userSideRoutes);
+// app.use("/api/v1/home-management",home)
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const status = error.status || 500;

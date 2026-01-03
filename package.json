@@ -42,6 +42,7 @@
     "@types/cookie-parser": "^1.4.10",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.5.0",
+    "cloudinary": "^2.8.0",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
