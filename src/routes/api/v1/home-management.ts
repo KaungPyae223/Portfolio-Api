@@ -53,6 +53,6 @@ router.patch(
   upload_cv
 );
 
-router.delete("/delete-cv", authMiddleware, delete_cv);
+router.delete("/delete-cv/:language", authMiddleware, delete_cv);
 
 export default router;

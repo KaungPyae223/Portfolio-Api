@@ -17,11 +17,24 @@ export const getHomeProfileImage = async () => {
   return profileImage;
 };
 
-export const getCV = async () => {
+export const getCV = async (language: string) => {
   const profileImage = await prisma.image.findFirst({
     where: {
-      category: "cv",
+      category: "cv-" + language,
       imageable_type: "Home",
+    },
+  });
+
+  return profileImage;
+};
+
+export const getAllCV = async () => {
+  const profileImage = await prisma.image.findMany({
+    where: {
+      imageable_type: "Home",
+      category: {
+        startsWith: "cv-",
+      },
     },
   });
 

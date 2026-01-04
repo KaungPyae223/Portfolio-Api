@@ -17,8 +17,8 @@ import {
   updateHomeMetaData,
 } from "../services/homeService";
 import { MiddlewareRequest } from "../types/middlewareRequest";
-import { createError } from "../utils/error";
 import {
+  getAllCV,
   getCV,
   getHomeProfileImage,
   storedImage,
@@ -37,7 +37,8 @@ export const homeController = async (
   const experiences = await getHomeExperiencesService();
   const educations = await getHomeEducationService();
   const profileImage = await getHomeProfileImage();
-  const cv = await getCV();
+  const cv = await getCV(language);
+  const allCVs = await getAllCV();
 
   const homeData = {
     ...home,
@@ -46,6 +47,7 @@ export const homeController = async (
     skills,
     experiences,
     educations,
+    allCVs,
   };
 
   return res.status(200).json(homeData);
@@ -278,13 +280,14 @@ export const upload_cv = async (
 ) => {
   try {
     const cloudinaryUrls = req.cloudinaryUrls;
+    const language = req.body.language;
 
     if (!cloudinaryUrls || cloudinaryUrls.length === 0) {
       res.status(400).json({ error: "No images uploaded" });
       return;
     }
 
-    const oldCV = await getCV();
+    const oldCV = await getCV(language);
 
     if (oldCV) {
       await deleteImage(oldCV.public_id);
@@ -293,7 +296,7 @@ export const upload_cv = async (
     const ImageData = {
       public_id: cloudinaryUrls[0].public_id,
       url: cloudinaryUrls[0].url,
-      category: "cv",
+      category: "cv-" + language,
       imageable_id: 0,
       imageable_type: "Home",
     };
@@ -314,7 +317,7 @@ export const delete_cv = async (
   res: Response,
   next: NextFunction
 ) => {
-  const oldCV = await getCV();
+  const oldCV = await getCV(req.params.language);
 
   if (oldCV) {
     await deleteImage(oldCV.public_id);
