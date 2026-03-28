@@ -13,6 +13,9 @@ import { body, validationResult } from "express-validator";
 import { validationError } from "../utils/validationHandler";
 import {
   getAllHome,
+  getSkillImage,
+  skillDelete,
+  storeSkill,
   updateHome,
   updateHomeMetaData,
 } from "../services/homeService";
@@ -24,11 +27,14 @@ import {
   storedImage,
 } from "../services/imageService";
 import { deleteImage } from "../utils/deleteImage";
+import { CustomErrorType } from "../types/error";
+import { errorCode } from "../config/errorCode";
+import { getCertificates } from "../services/certificatesServices";
 
 export const homeController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const language = (req.query.language as string) || "English";
 
@@ -56,7 +62,7 @@ export const homeController = async (
 export const getAllHomeController = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const home = await getAllHome();
   return res.status(200).json(home);
@@ -146,7 +152,7 @@ export const homeExperienceController = [
 export const homeExperienceDeleteController = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const experienceId = req.params.id;
 
@@ -182,7 +188,7 @@ export const homeEducationController = [
 export const homeEducationDeleteController = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const educationId = req.params.id;
 
@@ -222,7 +228,7 @@ export const homeMetaUpdateController = [
 export const upload_profile_image = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const cloudinaryUrls = req.cloudinaryUrls;
@@ -260,7 +266,7 @@ export const upload_profile_image = async (
 export const delete_profile_image = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const oldImage = await getHomeProfileImage();
 
@@ -276,7 +282,7 @@ export const delete_profile_image = async (
 export const upload_cv = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const cloudinaryUrls = req.cloudinaryUrls;
@@ -315,7 +321,7 @@ export const upload_cv = async (
 export const delete_cv = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const oldCV = await getCV(req.params.language);
 
@@ -326,4 +332,74 @@ export const delete_cv = async (
   return res.status(200).json({
     message: "Images deleted successfully",
   });
+};
+
+export const createSkill = [
+  body("name").isLength({ min: 1 }).withMessage("Name is required"),
+  async (req: MiddlewareRequest, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+    validationError(errors);
+
+    try {
+      const cloudinaryUrls = req.cloudinaryUrls;
+
+      if (!cloudinaryUrls || cloudinaryUrls.length === 0) {
+        const error: CustomErrorType = new Error("No images uploaded");
+        error.status = 400;
+        error.err_code = errorCode.invalidCredentials;
+        throw error;
+      }
+
+      const skill = await storeSkill(req.body.name);
+
+      const ImageData = {
+        public_id: cloudinaryUrls[0].public_id,
+        url: cloudinaryUrls[0].url,
+        category: "skill-image",
+        imageable_id: skill.id,
+        imageable_type: "Skill",
+      };
+
+      await storedImage(ImageData);
+
+      res.status(200).json({
+        message: "Skill created successfully",
+      });
+    } catch (error) {
+      console.error("Upload error:", error);
+      res.status(500).json({ error: "Failed to create cv" });
+    }
+  },
+];
+
+export const deleteSkill = async (
+  req: MiddlewareRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  const id = req.params.id;
+
+  const skillImage = await getSkillImage(Number(id));
+
+  if (skillImage) {
+    await deleteImage(skillImage?.public_id);
+  }
+
+  await skillDelete(Number(id));
+
+  return res.status(200).json({
+    message: "Skill deleted successfully",
+  });
+};
+
+export const getAllCertificates = async (
+  req: MiddlewareRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  const q = req.query.q as string;
+
+  const certificates = await getCertificates(q);
+
+  return res.status(200).json(certificates);
 };

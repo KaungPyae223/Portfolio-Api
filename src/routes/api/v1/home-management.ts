@@ -1,7 +1,9 @@
 import express from "express";
 import {
+  createSkill,
   delete_cv,
   delete_profile_image,
+  deleteSkill,
   getAllHomeController,
   homeAboutManagementController,
   homeEducationController,
@@ -54,5 +56,15 @@ router.patch(
 );
 
 router.delete("/delete-cv/:language", authMiddleware, delete_cv);
+
+router.post(
+  "/create-skill",
+  authMiddleware,
+  upload.single("image"),
+  uploadToCloudinary,
+  createSkill
+);
+
+router.delete("/delete-skill/:id", authMiddleware, deleteSkill);
 
 export default router;

@@ -45,15 +45,6 @@ model Home {
   @@map("home")
 }
 
-model Link {
- id            Int       @id @default(autoincrement())
- name          String
- url           String
- project_id    Int
- project       Project @relation(fields: [project_id], references: [id])
- @@map("links")
-}
-
 
 model Skill {
  id            Int       @id @default(autoincrement())
@@ -68,15 +59,15 @@ model Project {
  name          String
  description   String
  technologies  String
- type          String
- duration      String
- team_size     String
+ demo_url      String
+ front_end     String
+ back_end      String
+ doc_url       String
+ is_featured   Boolean @default(false)
  role          String
  challenge     String
  solutions     String
- set_home      Boolean
- links         Link[]
- language      String?
+ key_feature   String
  created_at    DateTime @default(now())
  updated_at    DateTime @updatedAt
  @@map("projects")
@@ -89,7 +80,6 @@ model Certificate {
  url           String
  complete_date String
  technologies  String
- set_home      Boolean
  created_at    DateTime @default(now())
  updated_at    DateTime @updatedAt
  @@map("certificates")
@@ -125,16 +115,6 @@ model Education {
   @@map("educations")
 }
 
-model Log {
-  id            Int       @id @default(autoincrement())
-  title         String?
-  description   String?
-  logable_id Int
-  logable_type String
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  @@map("logs")
-}
 
 
 

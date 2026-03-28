@@ -10,7 +10,7 @@ import { createError } from "../utils/error";
 export const authMiddleware = async (
   req: MiddlewareRequest,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   const { accessToken, refreshToken } = req.cookies ?? {};
 
@@ -24,7 +24,7 @@ export const authMiddleware = async (
 
     if (!secret) {
       return next(
-        createError("Server configuration error", 500, errorCode.serverError)
+        createError("Server configuration error", 500, errorCode.serverError),
       );
     }
 
@@ -34,22 +34,12 @@ export const authMiddleware = async (
       const user = await getUserByEmail(email);
 
       if (!user) {
-        return next(
-          createError(
-            "You are not an authenticated user",
-            401,
-            errorCode.expiredAccessToken
-          )
-        );
+        return next(createError("User not found", 401, errorCode.unauthorized));
       }
 
       if (user.random_token !== refreshToken) {
         return next(
-          createError(
-            "You are not an authenticated user",
-            401,
-            errorCode.expiredAccessToken
-          )
+          createError("Invalid session", 401, errorCode.unauthorized),
         );
       }
 
@@ -59,17 +49,19 @@ export const authMiddleware = async (
         random_token: tokens.refreshToken,
       });
 
+      const isProduction = process.env.NODE_ENV === "production";
+
       _res
         .cookie("accessToken", tokens.accessToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "none",
+          secure: isProduction,
+          sameSite: isProduction ? "none" : "lax",
           maxAge: 15 * 60 * 1000,
         })
         .cookie("refreshToken", tokens.refreshToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "none",
+          secure: isProduction,
+          sameSite: isProduction ? "none" : "lax",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
@@ -80,8 +72,8 @@ export const authMiddleware = async (
         createError(
           "Refresh Token is Expired",
           401,
-          errorCode.expiredAccessToken
-        )
+          errorCode.expiredRefreshToken,
+        ),
       );
     }
   };
@@ -92,26 +84,22 @@ export const authMiddleware = async (
     const secret = process.env.ACCESS_TOKEN_SECRET;
     if (!secret) {
       return next(
-        createError("Server configuration error", 500, errorCode.serverError)
+        createError("Server configuration error", 500, errorCode.serverError),
       );
     }
 
     try {
       const decoded = jwt.verify(accessToken, secret) as JwtPayload & {
-        id: string;
+        id: number;
       };
-      req.userID = parseInt(decoded.id);
+      req.userID = decoded.id;
       next();
     } catch (err: any) {
       if (err.name == "TokenExpiredError") {
         await generateNewTokens();
       } else {
         return next(
-          createError(
-            "Access Token is invalid",
-            401,
-            errorCode.expiredAccessToken
-          )
+          createError("Access Token is invalid", 401, errorCode.unauthorized),
         );
       }
     }

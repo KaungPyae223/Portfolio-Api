@@ -10,16 +10,30 @@ export const getHomeService = async (language: string) => {
 };
 
 export const getSkillsService = async () => {
-  const getUserSideService = await prisma.skill.findMany();
-  return getUserSideService;
+  const skills = await prisma.skill.findMany();
+
+  const skillInfo = await Promise.all(
+    skills.map(async (data) => {
+      const image = await prisma.image.findFirst({
+        where: {
+          imageable_type: "Skill",
+          imageable_id: data.id,
+        },
+      });
+
+      return {
+        id: data.id,
+        name: data.name,
+        image: image?.url || null,
+      };
+    })
+  );
+
+  return skillInfo;
 };
 
 export const getHomeProjectsService = async () => {
-  const getUserSideService = await prisma.project.findMany({
-    where: {
-      set_home: true,
-    },
-  });
+  const getUserSideService = await prisma.project.findMany();
   return getUserSideService;
 };
 

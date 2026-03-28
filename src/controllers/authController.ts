@@ -28,7 +28,7 @@ export const registerController = [
       minSymbols: 1,
     })
     .withMessage(
-      "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbol"
+      "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbol",
     ),
 
   async (req: Request, res: Response, next: NextFunction) => {
@@ -56,17 +56,19 @@ export const registerController = [
       random_token: refreshToken,
     });
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     return res
       .cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 15 * 60 * 1000,
       })
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .status(201)
@@ -109,17 +111,19 @@ export const loginController = [
       random_token: refreshToken,
     });
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     return res
       .cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 15 * 60 * 1000,
       })
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .status(201)
@@ -140,7 +144,7 @@ export const changePasswordController = [
       minSymbols: 1,
     })
     .withMessage(
-      "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbol"
+      "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbol",
     ),
 
   async (req: MiddlewareRequest, res: Response, next: NextFunction) => {
@@ -174,17 +178,19 @@ export const changePasswordController = [
 export const logOutController = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.clearCookie("accessToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   });
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   });
 
   await updateUser(req.userID!, {
@@ -199,10 +205,7 @@ export const logOutController = async (
 export const checkAuthController = async (
   req: MiddlewareRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  
   res.json("me");
-}
-
-
+};
