@@ -1,7 +1,7 @@
 import { prisma } from "../../lib/prisma";
 
 export const storedImage = async (imageData: any) => {
-  const updateHome = await prisma.image.create({
+  return await prisma.image.create({
     data: imageData,
   });
 };

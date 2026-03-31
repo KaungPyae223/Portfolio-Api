@@ -9,6 +9,7 @@ import {
   deleteProjectDetailsImage,
   getProjectController,
   getProjectDetailsController,
+  updateFeaturedProjectController,
   updateProjectController,
 } from "../../../controllers/projectController";
 
@@ -31,6 +32,7 @@ router.put(
   uploadToCloudinary,
   updateProjectController,
 );
+router.delete("/images", authMiddleware, deleteProjectDetailsImage);
 router.delete("/:id", authMiddleware, deleteProjectController);
 
 router.post(
@@ -40,6 +42,7 @@ router.post(
   uploadToCloudinary,
   createProjectDetailsImages,
 );
-router.delete("/images/:imageId", authMiddleware, deleteProjectDetailsImage);
+
+router.put("/featured/:id", authMiddleware, updateFeaturedProjectController);
 
 export default router;

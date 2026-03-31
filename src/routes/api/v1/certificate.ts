@@ -8,6 +8,7 @@ import {
   getCertificateController,
   getCertificateDetailsController,
   updateCertificateController,
+  updateFeaturedCertificateController,
 } from "../../../controllers/certificateController";
 
 const router = express.Router();
@@ -30,5 +31,10 @@ router.put(
   updateCertificateController,
 );
 router.delete("/:id", authMiddleware, deleteCertificateController);
+router.put(
+  "/featured/:id",
+  authMiddleware,
+  updateFeaturedCertificateController,
+);
 
 export default router;

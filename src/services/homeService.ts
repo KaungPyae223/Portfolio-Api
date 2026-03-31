@@ -9,6 +9,65 @@ export const updateHome = async (language: string, homeData: any) => {
   });
 };
 
+export const getHomeCertificates = async () => {
+  const certificates = await prisma.certificate.findMany({
+    where: {
+      is_featured: true,
+    },
+  });
+
+  const ids = certificates.map((certificate) => certificate.id);
+
+  const images = await prisma.image.findMany({
+    where: {
+      imageable_id: {
+        in: ids,
+      },
+      imageable_type: "Certificate",
+    },
+  });
+
+  const certificateWithImages = certificates.map((certificate) => {
+    const image = images.find((image) => image.imageable_id === certificate.id);
+    return {
+      image: image?.url || null,
+      ...certificate,
+    };
+  });
+
+  return certificateWithImages;
+};
+
+export const getHomeProjects = async () => {
+  const projects = await prisma.project.findMany({
+    where: {
+      is_featured: true,
+    },
+  });
+
+  const ids = projects.map((project) => project.id);
+
+  const images = await prisma.image.findMany({
+    where: {
+      imageable_id: {
+        in: ids,
+      },
+      category: "project-profile-image",
+      imageable_type: "Project",
+    },
+  });
+
+  const projectWithImages = projects.map((project) => {
+    const image = images.find((image) => image.imageable_id === project.id);
+    return {
+      image: image?.url || null,
+      ...project,
+    };
+  });
+
+  return projectWithImages;
+};
+
 export const getAllHome = async () => {
   const getAllHomeData = await prisma.home.findMany();
   return getAllHomeData;

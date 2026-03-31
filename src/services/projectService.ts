@@ -12,7 +12,6 @@ export const createProjectService = async (projectData: {
   challenge: string;
   solutions: string;
   key_feature: string;
-  is_featured: boolean;
 }) => {
   const project = await prisma.project.create({
     data: projectData,
@@ -59,7 +58,6 @@ export const updateProjectService = async (
     challenge: string;
     solutions: string;
     key_feature: string;
-    is_featured: boolean;
   },
 ) => {
   const project = await prisma.project.update({
@@ -136,4 +134,23 @@ export const getProject = async (q: string) => {
   });
 
   return projectWithImages;
+};
+
+export const updateFeaturedProjectService = async (id: string) => {
+  const project = await prisma.project.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  const projectUpdate = await prisma.project.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      is_featured: !project?.is_featured,
+    },
+  });
+
+  return projectUpdate;
 };

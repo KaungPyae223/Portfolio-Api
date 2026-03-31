@@ -6,6 +6,7 @@ import {
   getCertificateImage,
   getCertificates,
   updateCertificateService,
+  updateFeaturedCertificateService,
 } from "../services/certificatesServices";
 import { body, validationResult } from "express-validator";
 import { validationError } from "../utils/validationHandler";
@@ -165,5 +166,19 @@ export const deleteCertificateController = async (
 
   return res.status(200).json({
     message: "Certificate Deleted Successfully",
+  });
+};
+
+export const updateFeaturedCertificateController = async (
+  req: MiddlewareRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  const id = req.params.id;
+
+  const certificate = await updateFeaturedCertificateService(id);
+
+  return res.status(200).json({
+    message: "Certificate Featured Updated Successfully",
   });
 };

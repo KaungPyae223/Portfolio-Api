@@ -13,6 +13,8 @@ import { body, validationResult } from "express-validator";
 import { validationError } from "../utils/validationHandler";
 import {
   getAllHome,
+  getHomeCertificates,
+  getHomeProjects,
   getSkillImage,
   skillDelete,
   storeSkill,
@@ -43,6 +45,8 @@ export const homeController = async (
   const experiences = await getHomeExperiencesService();
   const educations = await getHomeEducationService();
   const profileImage = await getHomeProfileImage();
+  const certificates = await getHomeCertificates();
+  const projects = await getHomeProjects();
   const cv = await getCV(language);
   const allCVs = await getAllCV();
 
@@ -54,6 +58,8 @@ export const homeController = async (
     experiences,
     educations,
     allCVs,
+    certificates,
+    projects,
   };
 
   return res.status(200).json(homeData);

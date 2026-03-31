@@ -126,3 +126,22 @@ export const deleteCertificateService = async (id: string) => {
 
   return certificate;
 };
+
+export const updateFeaturedCertificateService = async (id: string) => {
+  const certificate = await prisma.certificate.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  const certificateUpdate = await prisma.certificate.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      is_featured: !certificate?.is_featured,
+    },
+  });
+
+  return certificateUpdate;
+};

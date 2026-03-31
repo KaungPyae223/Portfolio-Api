@@ -14,6 +14,7 @@ import {
   getProjectDetails,
   getProjectDetailsImages,
   getProjectImage,
+  updateFeaturedProjectService,
   updateProjectService,
 } from "../services/projectService";
 
@@ -35,7 +36,6 @@ export const createProjectController = [
   body("key_feature")
     .isLength({ min: 3 })
     .withMessage("Key feature is required"),
-  body("is_featured").isBoolean().withMessage("Is featured is required"),
   async (req: MiddlewareRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     validationError(errors);
@@ -62,7 +62,6 @@ export const createProjectController = [
         challenge: req.body.challenge,
         solutions: req.body.solutions,
         key_feature: req.body.key_feature,
-        is_featured: req.body.is_featured,
       };
 
       const project = await createProjectService(projectData);
@@ -79,6 +78,7 @@ export const createProjectController = [
 
       return res.status(200).json({
         message: "Project Created Successfully",
+        id: project.id,
       });
     } catch (error) {
       console.error("Upload error:", error);
@@ -110,7 +110,7 @@ export const createProjectDetailsImages = async (
         public_id: url.public_id,
         url: url.url,
         category: "project-details-image",
-        imageable_id: req.params.id,
+        imageable_id: Number(req.params.id),
         imageable_type: "Project",
       };
 
@@ -127,15 +127,17 @@ export const createProjectDetailsImages = async (
 };
 
 export const deleteProjectDetailsImage = [
-  body("public_id").isLength({ min: 1 }).withMessage("Id is required"),
+  body("public_ids").isArray().withMessage("Id is required"),
   async (req: MiddlewareRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     validationError(errors);
 
     try {
-      const public_id = req.body.public_id;
+      const public_ids = req.body.public_ids;
 
-      deleteImage(public_id);
+      public_ids.forEach((public_id: string) => {
+        deleteImage(public_id);
+      });
 
       return res.status(200).json({
         message: "Project Details Images Deleted Successfully",
@@ -165,7 +167,6 @@ export const updateProjectController = [
   body("key_feature")
     .isLength({ min: 3 })
     .withMessage("Key feature is required"),
-  body("is_featured").isBoolean().withMessage("Is featured is required"),
   async (req: MiddlewareRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     validationError(errors);
@@ -193,13 +194,6 @@ export const updateProjectController = [
         await storedImage(ImageData);
       }
 
-      if (!cloudinaryUrls || cloudinaryUrls.length === 0) {
-        const error: CustomErrorType = new Error("No images uploaded");
-        error.status = 400;
-        error.err_code = errorCode.invalidCredentials;
-        throw error;
-      }
-
       const projectData = {
         name: req.body.name,
         description: req.body.description,
@@ -212,23 +206,13 @@ export const updateProjectController = [
         challenge: req.body.challenge,
         solutions: req.body.solutions,
         key_feature: req.body.key_feature,
-        is_featured: req.body.is_featured,
       };
 
       const project = await updateProjectService(id, projectData);
 
-      const ImageData = {
-        public_id: cloudinaryUrls![0].public_id,
-        url: cloudinaryUrls![0].url,
-        category: "project-profile-image",
-        imageable_id: project.id,
-        imageable_type: "Project",
-      };
-
-      await storedImage(ImageData);
-
       return res.status(200).json({
-        message: "Project Created Successfully",
+        message: "Project Updated Successfully",
+        project,
       });
     } catch (error) {
       console.error("Upload error:", error);
@@ -279,12 +263,9 @@ export const getProjectDetailsController = async (
   const detailsImages = await getProjectDetailsImages(id);
 
   return res.status(200).json({
-    message: "Project Details Fetched Successfully",
-    data: {
-      profileImage,
-      detailsImages,
-      ...project,
-    },
+    profileImage: profileImage?.url,
+    detailsImages,
+    ...project,
   });
 };
 
@@ -298,4 +279,18 @@ export const getProjectController = async (
   const projects = await getProject(q);
 
   return res.status(200).json(projects);
+};
+
+export const updateFeaturedProjectController = async (
+  req: MiddlewareRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  const id = req.params.id;
+
+  const project = await updateFeaturedProjectService(id);
+
+  return res.status(200).json({
+    message: "Project Featured Updated Successfully",
+  });
 };
