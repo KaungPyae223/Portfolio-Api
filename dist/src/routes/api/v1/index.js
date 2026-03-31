@@ -15,5 +15,10 @@ router.use("/user-side", user_side_1.default);
 router.use("/home-management", home_management_1.default);
 router.use("/certificate", certificate_1.default);
 router.use("/project", projects_1.default);
+router.use("/", function (req, res, next) {
+    res.status(200).json({
+        message: "Welcome to the Portfolio API",
+    });
+});
 exports.default = router;
 //# sourceMappingURL=index.js.map

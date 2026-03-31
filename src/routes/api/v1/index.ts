@@ -13,4 +13,10 @@ router.use("/home-management", home);
 router.use("/certificate", certificate);
 router.use("/project", project);
 
+router.use("/", function (req, res, next) {
+  res.status(200).json({
+    message: "Welcome to the Portfolio API",
+  });
+});
+
 export default router;

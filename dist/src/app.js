@@ -38,9 +38,6 @@ exports.app
     .use((0, cookie_parser_1.default)())
     .use(rateLimitter_1.default)
     .use("/api/v1", v1_1.default);
-// app.use("/api/v1/auth", authRoutes);
-// app.use("/api/v1/user-side", userSideRoutes);
-// app.use("/api/v1/home-management",home)
 exports.app.use((error, req, res, next) => {
     const status = error.status || 500;
     const message = error.message || "Server Error";
