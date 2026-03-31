@@ -10,5 +10,7 @@ const router = express_1.default.Router();
 router.post("/register", authController_1.registerController);
 router.post("/login", authController_1.loginController);
 router.post("/change-password", auth_1.authMiddleware, authController_1.changePasswordController);
+router.post("/logout", auth_1.authMiddleware, authController_1.logOutController);
+router.get("/check-auth", auth_1.authMiddleware, authController_1.checkAuthController);
 exports.default = router;
 //# sourceMappingURL=auth.js.map

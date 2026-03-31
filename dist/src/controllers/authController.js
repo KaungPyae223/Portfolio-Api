@@ -33,12 +33,13 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changePasswordController = exports.loginController = exports.registerController = void 0;
+exports.checkAuthController = exports.logOutController = exports.changePasswordController = exports.loginController = exports.registerController = void 0;
 const express_validator_1 = require("express-validator");
 const validationHandler_1 = require("../utils/validationHandler");
 const authService_1 = require("../services/authService");
 const auth_1 = require("../utils/auth");
 const bcrypt = __importStar(require("bcrypt"));
+const errorCode_1 = require("../config/errorCode");
 exports.registerController = [
     (0, express_validator_1.body)("email").isEmail().withMessage("Invalid email"),
     (0, express_validator_1.body)("password")
@@ -68,17 +69,18 @@ exports.registerController = [
         await (0, authService_1.updateUser)(user.id, {
             random_token: refreshToken,
         });
+        const isProduction = process.env.NODE_ENV === "production";
         return res
             .cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 15 * 60 * 1000,
         })
             .cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })
             .status(201)
@@ -97,31 +99,32 @@ exports.loginController = [
         if (!user) {
             const error = new Error("Invalid email or password");
             error.status = 409;
-            error.err_code = "INVALID_CREDENTIALS";
+            error.err_code = errorCode_1.errorCode.invalidCredentials;
             throw error;
         }
         const isMatch = await bcrypt.compare(req.body.password, user.password);
         if (!isMatch) {
             const error = new Error("Invalid email or password");
             error.status = 409;
-            error.err_code = "INVALID_CREDENTIALS";
+            error.err_code = errorCode_1.errorCode.invalidCredentials;
             throw error;
         }
         const { accessToken, refreshToken } = (0, auth_1.generateJWTTokens)(user);
         await (0, authService_1.updateUser)(user.id, {
             random_token: refreshToken,
         });
+        const isProduction = process.env.NODE_ENV === "production";
         return res
             .cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 15 * 60 * 1000,
         })
             .cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "none",
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })
             .status(201)
@@ -144,9 +147,46 @@ exports.changePasswordController = [
     async (req, res, next) => {
         const errors = (0, express_validator_1.validationResult)(req).array({ onlyFirstError: true });
         (0, validationHandler_1.validationError)(errors);
-        return res.json({
+        const user = (await (0, authService_1.getUserByID)(req.userID));
+        const isMatch = await bcrypt.compare(req.body.old_password, user.password);
+        if (!isMatch) {
+            const error = new Error("Invalid old password");
+            error.status = 409;
+            error.err_code = errorCode_1.errorCode.invalidCredentials;
+            throw error;
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(req.body.new_password, salt);
+        await (0, authService_1.updateUser)(user.id, {
+            password: hashPassword,
+        });
+        res.json({
             message: "Change password successfully",
         });
     },
 ];
+const logOutController = async (req, res, next) => {
+    const isProduction = process.env.NODE_ENV === "production";
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+    });
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+    });
+    await (0, authService_1.updateUser)(req.userID, {
+        random_token: null,
+    });
+    res.json({
+        message: "Log out successfully",
+    });
+};
+exports.logOutController = logOutController;
+const checkAuthController = async (req, res, next) => {
+    res.json("me");
+};
+exports.checkAuthController = checkAuthController;
 //# sourceMappingURL=authController.js.map

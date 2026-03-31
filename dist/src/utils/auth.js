@@ -6,11 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateJWTTokens = exports.checkUserExist = void 0;
 const crypto_1 = require("crypto");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const errorCode_1 = require("../config/errorCode");
 const checkUserExist = (userCount) => {
     if (userCount) {
         const error = new Error("There is a user in your system");
         error.status = 409;
-        error.err_code = "USER_EXIST";
+        error.err_code = errorCode_1.errorCode.userExist;
         throw error;
     }
 };

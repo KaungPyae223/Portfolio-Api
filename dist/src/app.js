@@ -10,17 +10,37 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const rateLimitter_1 = __importDefault(require("./middlewares/rateLimitter"));
-const auth_1 = __importDefault(require("./routes/api/v1/auth"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const v1_1 = __importDefault(require("./routes/api/v1"));
 exports.app = (0, express_1.default)();
+const whitelist = [process.env.ALLOW_ORIGIN];
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin ( like mobile apps or curl requests)
+        if (!origin)
+            return callback(null, true);
+        if (whitelist.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+};
 exports.app
     .use((0, morgan_1.default)("dev"))
     .use(express_1.default.urlencoded({ extended: true }))
     .use(express_1.default.json())
-    .use((0, cors_1.default)())
+    .use((0, cors_1.default)(corsOptions))
     .use((0, compression_1.default)())
     .use((0, helmet_1.default)({}))
-    .use(rateLimitter_1.default);
-exports.app.use("/api/v1/auth", auth_1.default);
+    .use((0, cookie_parser_1.default)())
+    .use(rateLimitter_1.default)
+    .use("/api/v1", v1_1.default);
+// app.use("/api/v1/auth", authRoutes);
+// app.use("/api/v1/user-side", userSideRoutes);
+// app.use("/api/v1/home-management",home)
 exports.app.use((error, req, res, next) => {
     const status = error.status || 500;
     const message = error.message || "Server Error";

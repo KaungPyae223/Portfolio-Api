@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserByEmail = exports.updateUser = exports.storedUser = exports.getTotalUsers = void 0;
+exports.getUserByID = exports.getUserByEmail = exports.updateUser = exports.storedUser = exports.getTotalUsers = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getTotalUsers = async () => {
     const totalUsers = await prisma_1.prisma.user.count();
@@ -33,4 +33,13 @@ const getUserByEmail = async (email) => {
     return getUserByEmail;
 };
 exports.getUserByEmail = getUserByEmail;
+const getUserByID = async (id) => {
+    const getUserByID = await prisma_1.prisma.user.findUnique({
+        where: {
+            id: id,
+        },
+    });
+    return getUserByID;
+};
+exports.getUserByID = getUserByID;
 //# sourceMappingURL=authService.js.map
