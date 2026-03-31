@@ -1,12 +1,6 @@
 import { prisma } from "../lib/prisma";
-import bcrypt from "bcrypt";
-import dotenv from "dotenv";
-dotenv.config();
 
 async function main() {
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(process.env.PASSWORD!, salt);
-
   await prisma.home.createMany({
     data: [
       {
