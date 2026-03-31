@@ -1,4 +1,4 @@
-import { User } from "../../generated/prisma/client";
+import { User } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 export const getTotalUsers = async () : Promise<number> => {

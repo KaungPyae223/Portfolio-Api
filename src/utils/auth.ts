@@ -1,7 +1,7 @@
 import { CustomErrorType } from "../types/error";
 import { randomBytes } from "crypto";
 import jwt from "jsonwebtoken";
-import { User } from "../../generated/prisma/client";
+import { User } from "@prisma/client";
 import { errorCode } from "../config/errorCode";
 
 export const checkUserExist = (userCount: number) => {

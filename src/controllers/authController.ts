@@ -12,8 +12,8 @@ import { checkUserExist, generateJWTTokens } from "../utils/auth";
 import * as bcrypt from "bcrypt";
 import { CustomErrorType } from "../types/error";
 import { MiddlewareRequest } from "../types/middlewareRequest";
-import { User } from "../../generated/prisma/client";
 import { errorCode } from "../config/errorCode";
+import { User } from "@prisma/client";
 
 export const registerController = [
   body("email").isEmail().withMessage("Invalid email"),
