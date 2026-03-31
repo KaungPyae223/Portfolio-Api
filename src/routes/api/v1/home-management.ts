@@ -14,10 +14,10 @@ import {
   homeMetaUpdateController,
   upload_cv,
   upload_profile_image,
-} from "../../../controllers/homeController";
-import { authMiddleware } from "../../../middlewares/auth";
-import upload from "../../../config/multerts";
-import { uploadToCloudinary } from "../../../middlewares/uploadMiddleware";
+} from "../../../controllers/homeController.js";
+import { authMiddleware } from "../../../middlewares/auth.js";
+import upload from "../../../config/multerts.js";
+import { uploadToCloudinary } from "../../../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 

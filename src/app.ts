@@ -5,7 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import rateLimitter from "./middlewares/rateLimitter";
 import cookieParser from "cookie-parser";
-import router from "./routes/api/v1";
+import router from "./routes/api/v1/index";
 
 export const app = express();
 
@@ -14,7 +14,7 @@ const whitelist = [process.env.ALLOW_ORIGIN];
 const corsOptions = {
   origin: function (
     origin: any,
-    callback: (err: Error | null, origin?: any) => void
+    callback: (err: Error | null, origin?: any) => void,
   ) {
     // Allow requests with no origin ( like mobile apps or curl requests)
     if (!origin) return callback(null, true);

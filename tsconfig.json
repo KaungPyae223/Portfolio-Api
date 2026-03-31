@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2023",
     "lib": ["ESNext"],
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
     "esModuleInterop": true,
@@ -12,5 +12,5 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-  "include": ["./*.js", "src/**/*.ts", "test/**/*.ts", "src/config/multerts.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts"]
 }

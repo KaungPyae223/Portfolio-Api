@@ -6,7 +6,7 @@ import {
   logOutController,
   checkAuthController,
 } from "../../../controllers/authController";
-import { authMiddleware } from "../../../middlewares/auth";
+import { authMiddleware } from "../../../middlewares/auth.js";
 const router = express.Router();
 
 router.post("/register", registerController);

@@ -2,3 +2,7 @@ node_modules/
 .env
 /generated/prisma
 dev.db
+
+/generated/prisma
+
+/generated/prisma

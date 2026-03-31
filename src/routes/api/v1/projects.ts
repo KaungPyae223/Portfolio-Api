@@ -1,6 +1,6 @@
-import { authMiddleware } from "../../../middlewares/auth";
-import upload from "../../../config/multerts";
-import { uploadToCloudinary } from "../../../middlewares/uploadMiddleware";
+import { authMiddleware } from "../../../middlewares/auth.js";
+import upload from "../../../config/multerts.js";
+import { uploadToCloudinary } from "../../../middlewares/uploadMiddleware.js";
 import express from "express";
 import {
   createProjectController,
@@ -11,7 +11,7 @@ import {
   getProjectDetailsController,
   updateFeaturedProjectController,
   updateProjectController,
-} from "../../../controllers/projectController";
+} from "../../../controllers/projectController.js";
 
 const router = express.Router();
 

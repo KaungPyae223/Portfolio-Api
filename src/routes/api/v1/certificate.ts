@@ -1,6 +1,6 @@
 import { authMiddleware } from "../../../middlewares/auth";
 import upload from "../../../config/multerts";
-import { uploadToCloudinary } from "../../../middlewares/uploadMiddleware";
+import { uploadToCloudinary } from "../../../middlewares/uploadMiddleware.js";
 import express from "express";
 import {
   createCertificateController,
@@ -9,7 +9,7 @@ import {
   getCertificateDetailsController,
   updateCertificateController,
   updateFeaturedCertificateController,
-} from "../../../controllers/certificateController";
+} from "../../../controllers/certificateController.js";
 
 const router = express.Router();
 
