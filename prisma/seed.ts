@@ -84,6 +84,8 @@ async function main() {
   await prisma.about.createMany({
     data: [
       {
+        title: "Introduction",
+        subtitle: "of My Story",
         first_paragraph:
           "Hi, I'm Kaung Pyae Aung, a passionate full-stack developer from Yangon, Myanmar. My journey began in 2023 at MMSIT, where under the guidance of Sayar Hein Htet Zan, I dove into intensive frontend and backend courses through hands-on workshops that transformed theoretical knowledge into real-world skills—teaching me Agile collaboration, Git version control, and clean, maintainable code in team settings. After completing my NCC Level 4 and 5 Diplomas at KMD (covering agile development, database management, and advanced computing), I pursued my Bachelor of Computing at the University of Greenwich (2024-2025), gaining comprehensive software engineering principles from database normalization and system architecture to modern deployment with Docker, CI/CD, and Vercel hosting.",
         second_paragraph:
@@ -91,6 +93,8 @@ async function main() {
         language: "English",
       },
       {
+        title: "自己紹介",
+        subtitle: "私の物語",
         first_paragraph:
           "こんにちは、私はミャンマー・ヤンゴン出身の情熱的なフルスタック開発者、Kaung Pyae Aungです。私の開発者としての旅は2023年にMMSITで始まりました。Sayar Hein Htet Zanの指導のもと、フロントエンドとバックエンドの集中コースに取り組み、ハンズオンワークショップを通じて理論知識を実世界のスキルに変えました。これにより、アジャイルコラボレーション、Gitバージョン管理、チーム環境でのクリーンで保守可能なコードの提供を学びました。その後、KMDでNCC Level 4およびLevel 5ディプロマ（アジャイル開発、データベース管理、先進コンピューティング）を修了し、University of GreenwichでBachelor of Computing（2024-2025）を追求。データベース正規化やシステムアーキテクチャからDocker、CI/CD、Vercelホスティングによる現代的なデプロイまで、包括的なソフトウェア工学の原則を習得しました。",
         second_paragraph:

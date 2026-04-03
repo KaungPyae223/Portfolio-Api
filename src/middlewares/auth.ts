@@ -3,7 +3,11 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { CustomErrorType } from "../types/error";
 import { MiddlewareRequest } from "../types/middlewareRequest";
 import { errorCode } from "../config/errorCode";
-import { getUserByEmail, updateUser } from "../services/authService";
+import {
+  getUserByEmail,
+  getUserByID,
+  updateUser,
+} from "../services/authService";
 import { generateJWTTokens } from "../utils/auth";
 import { createError } from "../utils/error";
 
@@ -93,6 +97,13 @@ export const authMiddleware = async (
         id: number;
       };
       req.userID = decoded.id;
+
+      let findUser = getUserByID(decoded.id);
+
+      if (!findUser) {
+        return next(createError("User not found", 401, errorCode.unauthorized));
+      }
+
       next();
     } catch (err: any) {
       if (err.name == "TokenExpiredError") {

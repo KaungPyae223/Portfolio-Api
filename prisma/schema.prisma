@@ -89,6 +89,8 @@ model Certificate {
 
 model About {
  id            Int       @id @default(autoincrement())
+ title         String?
+ subtitle      String?
  first_paragraph   String
  second_paragraph  String
  language      String?

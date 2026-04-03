@@ -107,3 +107,20 @@ export const getSkillImage = async (id: number) => {
 
   return skill;
 };
+
+export const createHomeEducationService = async (educationData: any) => {
+  await prisma.education.create({
+    data: {
+      ...educationData,
+      educationable_type: "Home",
+    },
+  });
+};
+
+export const deleteEducation = async (id: number) => {
+  await prisma.education.delete({
+    where: {
+      id: id,
+    },
+  });
+};

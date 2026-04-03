@@ -4,6 +4,7 @@ import userSideRoutes from "./user-side";
 import home from "./home-management";
 import certificate from "./certificate";
 import project from "./projects";
+import about from "./about";
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.use("/user-side", userSideRoutes);
 router.use("/home-management", home);
 router.use("/certificate", certificate);
 router.use("/project", project);
+router.use("/about", about);
 
 router.use("/", function (req, res, next) {
   res.status(200).json({

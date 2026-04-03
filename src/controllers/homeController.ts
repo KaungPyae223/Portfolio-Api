@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  createHomeEducationService,
   createHomeExperienceService,
-  deleteEducation,
   deleteExperience,
   getHomeEducationService,
   getHomeExperiencesService,
@@ -20,6 +18,8 @@ import {
   storeSkill,
   updateHome,
   updateHomeMetaData,
+  createHomeEducationService,
+  deleteEducation,
 } from "../services/homeService";
 import { MiddlewareRequest } from "../types/middlewareRequest";
 import {

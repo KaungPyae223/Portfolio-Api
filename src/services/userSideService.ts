@@ -26,7 +26,7 @@ export const getSkillsService = async () => {
         name: data.name,
         image: image?.url || null,
       };
-    })
+    }),
   );
 
   return skillInfo;
@@ -72,19 +72,32 @@ export const getHomeEducationService = async () => {
   return getUserSideService;
 };
 
-export const createHomeEducationService = async (educationData: any) => {
-  await prisma.education.create({
-    data: {
-      ...educationData,
-      educationable_type: "Home",
+export const getAboutService = async (language: string) => {
+  const about = await prisma.about.findFirst({
+    where: {
+      language: language,
     },
   });
+
+  return about;
 };
 
-export const deleteEducation = async (id: number) => {
-  await prisma.education.delete({
+export const getAboutEducationService = async (language: string) => {
+  const getUserSideService = await prisma.education.findMany({
     where: {
-      id: id,
+      educationable_type: "About",
+      language: language,
     },
   });
+  return getUserSideService;
+};
+
+export const getAboutExperienceService = async (language: string) => {
+  const getUserSideService = await prisma.experience.findMany({
+    where: {
+      experienceable_type: "About",
+      language: language,
+    },
+  });
+  return getUserSideService;
 };
