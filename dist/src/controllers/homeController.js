@@ -127,7 +127,7 @@ exports.homeEducationController = [
             title: req.body.title,
             description: req.body.description,
         };
-        await (0, userSideService_1.createHomeEducationService)(homeEducationData);
+        await (0, homeService_1.createHomeEducationService)(homeEducationData);
         return res.status(200).json({
             message: "Home Education Created Successfully",
         });
@@ -135,7 +135,7 @@ exports.homeEducationController = [
 ];
 const homeEducationDeleteController = async (req, res, next) => {
     const educationId = req.params.id;
-    await (0, userSideService_1.deleteEducation)(Number(educationId));
+    await (0, homeService_1.deleteEducation)(Number(educationId));
     return res.status(200).json({
         message: "Home Education Deleted Successfully",
     });

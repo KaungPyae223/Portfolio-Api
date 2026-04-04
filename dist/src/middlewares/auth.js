@@ -66,6 +66,10 @@ const authMiddleware = async (req, _res, next) => {
         try {
             const decoded = jsonwebtoken_1.default.verify(accessToken, secret);
             req.userID = decoded.id;
+            let findUser = (0, authService_1.getUserByID)(decoded.id);
+            if (!findUser) {
+                return next((0, error_1.createError)("User not found", 401, errorCode_1.errorCode.unauthorized));
+            }
             next();
         }
         catch (err) {

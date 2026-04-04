@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEducation = exports.createHomeEducationService = exports.getHomeEducationService = exports.deleteExperience = exports.createHomeExperienceService = exports.getHomeExperiencesService = exports.getHomeProjectsService = exports.getSkillsService = exports.getHomeService = void 0;
+exports.getAboutExperienceService = exports.getAboutEducationService = exports.getAboutService = exports.getHomeEducationService = exports.deleteExperience = exports.createHomeExperienceService = exports.getHomeExperiencesService = exports.getHomeProjectsService = exports.getSkillsService = exports.getHomeService = void 0;
 const prisma_1 = require("../../lib/prisma");
 const getHomeService = async (language) => {
     const getUserSideService = await prisma_1.prisma.home.findFirst({
@@ -69,21 +69,33 @@ const getHomeEducationService = async () => {
     return getUserSideService;
 };
 exports.getHomeEducationService = getHomeEducationService;
-const createHomeEducationService = async (educationData) => {
-    await prisma_1.prisma.education.create({
-        data: {
-            ...educationData,
-            educationable_type: "Home",
-        },
-    });
-};
-exports.createHomeEducationService = createHomeEducationService;
-const deleteEducation = async (id) => {
-    await prisma_1.prisma.education.delete({
+const getAboutService = async (language) => {
+    const about = await prisma_1.prisma.about.findFirst({
         where: {
-            id: id,
+            language: language,
         },
     });
+    return about;
 };
-exports.deleteEducation = deleteEducation;
+exports.getAboutService = getAboutService;
+const getAboutEducationService = async (language) => {
+    const getUserSideService = await prisma_1.prisma.education.findMany({
+        where: {
+            educationable_type: "About",
+            language: language,
+        },
+    });
+    return getUserSideService;
+};
+exports.getAboutEducationService = getAboutEducationService;
+const getAboutExperienceService = async (language) => {
+    const getUserSideService = await prisma_1.prisma.experience.findMany({
+        where: {
+            experienceable_type: "About",
+            language: language,
+        },
+    });
+    return getUserSideService;
+};
+exports.getAboutExperienceService = getAboutExperienceService;
 //# sourceMappingURL=userSideService.js.map

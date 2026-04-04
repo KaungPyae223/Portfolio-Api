@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSkillImage = exports.skillDelete = exports.storeSkill = exports.updateHomeMetaData = exports.getAllHome = exports.getHomeProjects = exports.getHomeCertificates = exports.updateHome = void 0;
+exports.deleteEducation = exports.createHomeEducationService = exports.getSkillImage = exports.skillDelete = exports.storeSkill = exports.updateHomeMetaData = exports.getAllHome = exports.getHomeProjects = exports.getHomeCertificates = exports.updateHome = void 0;
 const prisma_1 = require("../../lib/prisma");
 const updateHome = async (language, homeData) => {
     const updateHome = await prisma_1.prisma.home.updateMany({
@@ -100,4 +100,21 @@ const getSkillImage = async (id) => {
     return skill;
 };
 exports.getSkillImage = getSkillImage;
+const createHomeEducationService = async (educationData) => {
+    await prisma_1.prisma.education.create({
+        data: {
+            ...educationData,
+            educationable_type: "Home",
+        },
+    });
+};
+exports.createHomeEducationService = createHomeEducationService;
+const deleteEducation = async (id) => {
+    await prisma_1.prisma.education.delete({
+        where: {
+            id: id,
+        },
+    });
+};
+exports.deleteEducation = deleteEducation;
 //# sourceMappingURL=homeService.js.map
