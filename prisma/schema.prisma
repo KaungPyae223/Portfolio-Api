@@ -60,10 +60,10 @@ model Project {
  name          String
  description   String
  technologies  String
- demo_url      String
- front_end     String
- back_end      String
- doc_url       String
+ demo_url      String?
+ front_end     String?
+ back_end      String?
+ doc_url       String?
  is_featured   Boolean @default(false)
  role          String
  challenge     String

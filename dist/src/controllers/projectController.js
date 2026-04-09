@@ -13,12 +13,10 @@ exports.createProjectController = [
         .isLength({ min: 3 })
         .withMessage("Description is required"),
     (0, express_validator_1.body)("technologies").isLength({ min: 1 }).withMessage("Url is required"),
-    (0, express_validator_1.body)("demo_url")
-        .isLength({ min: 3 })
-        .withMessage("Complete date is required"),
-    (0, express_validator_1.body)("front_end").isLength({ min: 3 }).withMessage("Front end is required"),
-    (0, express_validator_1.body)("back_end").isLength({ min: 3 }).withMessage("Back end is required"),
-    (0, express_validator_1.body)("doc_url").isLength({ min: 3 }).withMessage("Doc url is required"),
+    (0, express_validator_1.body)("demo_url").optional(),
+    (0, express_validator_1.body)("front_end").optional(),
+    (0, express_validator_1.body)("back_end").optional(),
+    (0, express_validator_1.body)("doc_url").optional(),
     (0, express_validator_1.body)("role").isLength({ min: 3 }).withMessage("Role is required"),
     (0, express_validator_1.body)("challenge").isLength({ min: 3 }).withMessage("Challenge is required"),
     (0, express_validator_1.body)("solutions").isLength({ min: 3 }).withMessage("Solutions is required"),
@@ -126,12 +124,10 @@ exports.updateProjectController = [
         .isLength({ min: 3 })
         .withMessage("Description is required"),
     (0, express_validator_1.body)("technologies").isLength({ min: 1 }).withMessage("Url is required"),
-    (0, express_validator_1.body)("demo_url")
-        .isLength({ min: 3 })
-        .withMessage("Complete date is required"),
-    (0, express_validator_1.body)("front_end").isLength({ min: 3 }).withMessage("Front end is required"),
-    (0, express_validator_1.body)("back_end").isLength({ min: 3 }).withMessage("Back end is required"),
-    (0, express_validator_1.body)("doc_url").isLength({ min: 3 }).withMessage("Doc url is required"),
+    (0, express_validator_1.body)("demo_url").optional(),
+    (0, express_validator_1.body)("front_end").optional(),
+    (0, express_validator_1.body)("back_end").optional(),
+    (0, express_validator_1.body)("doc_url").optional(),
     (0, express_validator_1.body)("role").isLength({ min: 3 }).withMessage("Role is required"),
     (0, express_validator_1.body)("challenge").isLength({ min: 3 }).withMessage("Challenge is required"),
     (0, express_validator_1.body)("solutions").isLength({ min: 3 }).withMessage("Solutions is required"),

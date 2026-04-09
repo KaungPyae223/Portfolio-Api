@@ -24,12 +24,10 @@ export const createProjectController = [
     .isLength({ min: 3 })
     .withMessage("Description is required"),
   body("technologies").isLength({ min: 1 }).withMessage("Url is required"),
-  body("demo_url")
-    .isLength({ min: 3 })
-    .withMessage("Complete date is required"),
-  body("front_end").isLength({ min: 3 }).withMessage("Front end is required"),
-  body("back_end").isLength({ min: 3 }).withMessage("Back end is required"),
-  body("doc_url").isLength({ min: 3 }).withMessage("Doc url is required"),
+  body("demo_url").optional(),
+  body("front_end").optional(),
+  body("back_end").optional(),
+  body("doc_url").optional(),
   body("role").isLength({ min: 3 }).withMessage("Role is required"),
   body("challenge").isLength({ min: 3 }).withMessage("Challenge is required"),
   body("solutions").isLength({ min: 3 }).withMessage("Solutions is required"),
@@ -155,12 +153,10 @@ export const updateProjectController = [
     .isLength({ min: 3 })
     .withMessage("Description is required"),
   body("technologies").isLength({ min: 1 }).withMessage("Url is required"),
-  body("demo_url")
-    .isLength({ min: 3 })
-    .withMessage("Complete date is required"),
-  body("front_end").isLength({ min: 3 }).withMessage("Front end is required"),
-  body("back_end").isLength({ min: 3 }).withMessage("Back end is required"),
-  body("doc_url").isLength({ min: 3 }).withMessage("Doc url is required"),
+  body("demo_url").optional(),
+  body("front_end").optional(),
+  body("back_end").optional(),
+  body("doc_url").optional(),
   body("role").isLength({ min: 3 }).withMessage("Role is required"),
   body("challenge").isLength({ min: 3 }).withMessage("Challenge is required"),
   body("solutions").isLength({ min: 3 }).withMessage("Solutions is required"),

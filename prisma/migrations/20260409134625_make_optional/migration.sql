@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "projects" ALTER COLUMN "demo_url" DROP NOT NULL,
+ALTER COLUMN "front_end" DROP NOT NULL,
+ALTER COLUMN "back_end" DROP NOT NULL,
+ALTER COLUMN "doc_url" DROP NOT NULL;
