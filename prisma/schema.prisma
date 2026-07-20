@@ -12,25 +12,27 @@ datasource db {
 }
 
 model Image {
-  id   Int    @id @default(autoincrement())
-  url  String
-  public_id String
-  category String
-  imageable_id Int
+  id             Int    @id @default(autoincrement())
+  url            String
+  public_id      String
+  category       String
+  imageable_id   Int
   imageable_type String
+
   @@map("images")
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String  @unique
-  password      String
-  random_token  String?
+  id           Int     @id @default(autoincrement())
+  email        String  @unique
+  password     String
+  random_token String?
+
   @@map("users")
 }
 
 model Home {
-  id            Int       @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   prefix        String?
   name          String?
   title         String?
@@ -40,81 +42,87 @@ model Home {
   email         String?
   phone         String?
   github        String?
-  linkedin      String? 
+  linkedin      String?
   facebook      String?
   language      String?
+
   @@map("home")
 }
 
-
 model Skill {
- id            Int       @id @default(autoincrement())
- name          String
- created_at    DateTime @default(now())
- updated_at    DateTime @updatedAt
- @@map("skills")
+  id         Int      @id @default(autoincrement())
+  name       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("skills")
 }
 
 model Project {
- id            Int       @id @default(autoincrement())
- name          String
- description   String
- technologies  String
- demo_url      String?
- front_end     String?
- back_end      String?
- doc_url       String?
- is_featured   Boolean @default(false)
- role          String
- challenge     String
- solutions     String
- key_feature   String
- created_at    DateTime @default(now())
- updated_at    DateTime @updatedAt
- @@map("projects")
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String
+  technologies String
+  demo_url     String?
+  front_end    String?
+  back_end     String?
+  doc_url      String?
+  is_featured  Boolean  @default(false)
+  role         String
+  challenge    String
+  solutions    String
+  key_feature  String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@map("projects")
 }
 
 model Certificate {
- id            Int       @id @default(autoincrement())
- title         String
- lecture       String
- url           String
- complete_date String
- technologies  String
- is_featured   Boolean @default(false)
- created_at    DateTime @default(now())
- updated_at    DateTime @updatedAt
- @@map("certificates")
+  id            Int      @id @default(autoincrement())
+  title         String
+  lecture       String
+  url           String
+  complete_date String
+  technologies  String
+  is_featured   Boolean  @default(false)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  @@map("certificates")
 }
 
 model About {
- id            Int       @id @default(autoincrement())
- title         String?
- subtitle      String?
- first_paragraph   String
- second_paragraph  String
- language      String?
- @@map("about")
+  id               Int     @id @default(autoincrement())
+  title            String?
+  subtitle         String?
+  first_paragraph  String
+  second_paragraph String
+  language         String?
+
+  @@map("about")
 }
 
 model Experience {
-  id            Int       @id @default(autoincrement())
-  title         String?
-  description   String?
+  id                  Int      @id @default(autoincrement())
+  title               String?
+  description         String?
   experienceable_type String
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  language      String?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  language            String?
+
   @@map("experiences")
 }
 
 model Education {
-  id            Int       @id @default(autoincrement())
-  title         String?
-  description   String?
+  id                 Int      @id @default(autoincrement())
+  title              String?
+  description        String?
   educationable_type String
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  language      String?
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+  language           String?
+
   @@map("educations")
 }

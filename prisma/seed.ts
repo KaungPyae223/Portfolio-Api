@@ -1,6 +1,14 @@
 import { prisma } from "../lib/prisma";
 
 async function main() {
+  console.log("Testing connection...");
+
+  const result = await prisma.$queryRaw`
+    SELECT NOW()
+  `;
+
+  console.log(result);
+
   await prisma.home.createMany({
     data: [
       {
