@@ -13,7 +13,8 @@
   "author": "Kaung Pyae Aung",
   "license": "ISC",
   "description": "Portfolio API",
-  "devDependencies": {
+  "devDependencies": {},
+  "dependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/better-sqlite3": "^7.6.13",
     "@types/compression": "^1.8.1",
@@ -34,9 +35,7 @@
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
-  },
-  "dependencies": {
+    "typescript": "^5.9.3",
     "@prisma/adapter-better-sqlite3": "^7.1.0",
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
