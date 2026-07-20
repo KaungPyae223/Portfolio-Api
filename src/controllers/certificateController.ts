@@ -109,7 +109,7 @@ export const updateCertificateController = [
     try {
       const cloudinaryUrls = req.cloudinaryUrls;
 
-      const id = req.params.id;
+      const id = req.params.id as string;
 
       if (cloudinaryUrls) {
         const oldImage = await getCertificateImage(id);
@@ -154,7 +154,7 @@ export const deleteCertificateController = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const id = req.params.id;
+  const id = req.params.id as string;
 
   const oldImage = await getCertificateImage(id);
 
@@ -174,7 +174,7 @@ export const updateFeaturedCertificateController = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const id = req.params.id;
+  const id = req.params.id as string;
 
   const certificate = await updateFeaturedCertificateService(id);
 

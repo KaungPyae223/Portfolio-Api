@@ -170,7 +170,7 @@ export const updateProjectController = [
     try {
       const cloudinaryUrls = req.cloudinaryUrls;
 
-      const id = req.params.id;
+      const id = req.params.id as string;
 
       if (cloudinaryUrls) {
         const oldImage = await getProjectImage(id);
@@ -222,7 +222,7 @@ export const deleteProjectController = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const id = req.params.id;
+  const id = req.params.id as string;
 
   const oldImage = await getProjectImage(id);
 
@@ -250,7 +250,7 @@ export const getProjectDetailsController = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const id = req.params.id;
+  const id = req.params.id as string;
 
   const profileImage = await getProjectImage(id);
 
@@ -282,7 +282,7 @@ export const updateFeaturedProjectController = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const id = req.params.id;
+  const id = req.params.id as string;
 
   const project = await updateFeaturedProjectService(id);
 

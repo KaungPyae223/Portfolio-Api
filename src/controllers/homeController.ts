@@ -329,7 +329,7 @@ export const delete_cv = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const oldCV = await getCV(req.params.language);
+  const oldCV = await getCV(req.params.language as string);
 
   if (oldCV) {
     await deleteImage(oldCV.public_id);
@@ -383,7 +383,7 @@ export const deleteSkill = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const id = req.params.id;
+  const id = req.params.id as string;
 
   const skillImage = await getSkillImage(Number(id));
 

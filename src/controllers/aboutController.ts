@@ -125,7 +125,7 @@ export const updateAboutEducationController = [
     const errors = validationResult(req).array({ onlyFirstError: true });
     validationError(errors);
 
-    const id = req.params.id;
+    const id = req.params.id as string;
 
     const aboutExperienceData = {
       title: req.body.title,
@@ -185,7 +185,7 @@ export const updateAboutExperienceController = [
     const errors = validationResult(req).array({ onlyFirstError: true });
     validationError(errors);
 
-    const id = req.params.id;
+    const id = req.params.id as string;
 
     const aboutExperienceData = {
       title: req.body.title,
