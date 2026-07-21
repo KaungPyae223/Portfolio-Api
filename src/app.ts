@@ -6,8 +6,9 @@ import morgan from "morgan";
 import rateLimitter from "./middlewares/rateLimitter";
 import cookieParser from "cookie-parser";
 import router from "./routes/api/v1/index";
+import serverless from "serverless-http";
 
-export const app = express();
+const app = express();
 
 const whitelist = [process.env.ALLOW_ORIGIN];
 
@@ -44,3 +45,5 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const errorCode = error.err_code || "Error_Code";
   res.status(status).json({ message, error: errorCode });
 });
+
+export default serverless(app);
